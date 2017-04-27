@@ -1,3 +1,61 @@
-<script>function changeme(){document.getElementById('ok').innerHTML='changed';}</script>
-<button onclick="alert('hi!');">Testing github pages</button>
-<button onclick='changeme()' id="ok">Testing JS</button>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Random Spotify Song Generator</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style type="text/css">
+    body {
+        background-color: black;
+    }
+    
+    .spotify {
+        background-color: green;
+    }
+    </style>
+    <script type="text/javascript" async="" src="spotify-web-api.js"></script>
+    <script>
+    function getRandomSong() {
+        var alphabet = "abcdefghijklmnopqrstuvwxyz";
+
+        function getRandomLetter() {
+            return alphabet[Math.floor(Math.random() * alphabet.length)];
+        }
+
+        var url_prefix = 'https://open.spotify.com/embed?uri=spotify:track:';
+        var spotifyApi = new SpotifyWebApi();
+        var random_number = Math.floor((Math.random() * 100000) + 1);
+        spotifyApi.searchTracks(getRandomLetter(), {
+            limit: 1,
+            offset: random_number
+        }, function(err, data) {
+            if (err) {
+                console.error(err);
+            } else {
+                var url = url_prefix + data.tracks.items[0].id;
+                document.getElementById('random-webplayer').src = url;
+            }
+        });
+
+    }
+    </script>
+</head>
+
+<body>
+    <div class="container spotify">
+        <h1>Get a random song from Spotify!</h1>
+        <button class="btn btn-success" onclick="getRandomSong();"" id="ok">Anotha one</button>
+        <hr>
+        <div>
+            <iframe src="" id="random-webplayer" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+        </div>
+    </div>
+    <script>
+    // self executing function here
+    (function() {
+		getRandomSong();
+    })();
+    </script>
+</body>
+
+</html>
