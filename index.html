@@ -32,10 +32,8 @@
             if (err) {
                 console.error(err);
             } else {
-            	if (data.tracks.items[0] == undefined) {
-            		console.log(data);
-            		//alert soemthing went wrong try again
-            		// debugger;
+            	if (data.tracks.items.length == 0) {
+            		getRandomSong();
             	}
                 var url = url_prefix + data.tracks.items[0].id;
                 document.getElementById('random-webplayer').src = url;
@@ -59,7 +57,6 @@
         </div>
     </div>
     <script>
-    // self executing function here
     var everythingLoaded = setInterval(function() {
         if (/loaded|complete/.test(document.readyState)) {
             clearInterval(everythingLoaded);
