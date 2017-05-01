@@ -32,10 +32,15 @@ function setSong(track_id) {
     document.getElementById('random-webplayer').src = url_prefix + track_id;
 }
 
+function removeFromHistory(guy){
+    guy.parentElement.parentElement.remove();
+}
+
 function addToHistory(track, artist, album, id) {
     var node = document.querySelector('#history-clone');
     copy = node.cloneNode(true);
     copy.style.display = "table-row";
+    copy.removeAttribute('id');
     copy.children.namedItem('song').innerHTML = track;
     copy.children.namedItem('artist').innerHTML = artist;
     copy.children.namedItem('album').innerHTML = album;
