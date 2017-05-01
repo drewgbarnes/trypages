@@ -19,11 +19,46 @@
 
 <body>
     <div class="container spotify">
-        <h1>Get a random song from Spotify!</h1>
-        <button class="btn btn-primary" onclick="getRandomSong();" id="ok">Get one</button>
-        <hr>
-        <div>
-            <iframe src="" id="random-webplayer" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Get a random song from Spotify!</h1>
+                <button class="btn btn-primary" onclick="getRandomSong();" id="ok">Get one</button>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5 col-md-offset-1">
+                <iframe src="" id="random-webplayer" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+            </div>
+            <div class="col-md-6">
+                <div class="well">
+                    <h2>History</h2>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Song</th>
+                                    <th>Artist</th>
+                                    <th>Album</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="history-clone" style="display: none">
+                                    <td name="song"></td>
+                                    <td name="artist"></td>
+                                    <td name="album"></td>
+                                    <td name="replay">
+                                        <button name="replay-button" onclick="setSong(this.id);">
+                                            <span class="glyphicon glyphicon-play"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script>

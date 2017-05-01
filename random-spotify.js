@@ -5,7 +5,6 @@ function getRandomSong(clicked = true) {
         return alphabet[Math.floor(Math.random() * alphabet.length)];
     }
 
-    var url_prefix = 'https://open.spotify.com/embed?uri=spotify:track:';
     var spotifyApi = new SpotifyWebApi();
     var random_number = Math.floor((Math.random() * 100000) + 1);
     spotifyApi.searchTracks(getRandomLetter(), {
@@ -18,11 +17,28 @@ function getRandomSong(clicked = true) {
             if (data.tracks.items.length == 0) {
                 getRandomSong();
             }
-            var url = url_prefix + data.tracks.items[0].id;
-            document.getElementById('random-webplayer').src = url;
+            var track = data.tracks.items[0];
+            setSong(track.id);
             if (clicked) {
                 document.getElementById('ok').innerHTML = "Anotha one";
             }
+            addToHistory(track.name, track.artists[0].name, track.album.name, track.id);
         }
     });
+}
+
+function setSong(track_id) {
+    var url_prefix = 'https://open.spotify.com/embed?uri=spotify:track:';
+    document.getElementById('random-webplayer').src = url_prefix + track_id;
+}
+
+function addToHistory(track, artist, album, id) {
+    var node = document.querySelector('#history-clone');
+    copy = node.cloneNode(true);
+    copy.style.display = "table-row";
+    copy.children.namedItem('song').innerHTML = track;
+    copy.children.namedItem('artist').innerHTML = artist;
+    copy.children.namedItem('album').innerHTML = album;
+    copy.children.namedItem('replay').children.namedItem('replay-button').id = id;
+    node.parentNode.insertBefore(copy, node);
 }
