@@ -12,6 +12,19 @@
     .spotify {
         background-color: rgb(29, 185, 84);
     }
+    
+    .history {
+        display: inline-flex;
+    }
+    
+    .offscreen {
+        position: absolute;
+        margin-left: -9999px;
+    }
+    
+    .top-pad {
+        margin-top: 20px;
+    }
     </style>
     <script type="text/javascript" src="spotify-web-api.js"></script>
     <script type="text/javascript" src="random-spotify.js"></script>
@@ -19,10 +32,9 @@
 
 <body>
     <div class="container spotify">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>Get a random song from Spotify!</h1>
-                <button class="btn btn-primary" onclick="getRandomSong();" id="ok">Get one</button>
+        <div class="row top-pad">
+            <div class="col-md-12 text-center">
+                <button class="btn btn-primary btn-lg" onclick="getRandomSong();" id="ok">Get a random song from Spotify!</button>
                 <hr>
             </div>
         </div>
@@ -32,7 +44,9 @@
             </div>
             <div class="col-md-8">
                 <div class="well">
-                    <h2>History</h2>
+                    <h2 class="history">History</h2>
+                    <textarea class="offscreen" type="text" id="tracklist" value=""></textarea>
+                    <button onclick="copyToClipboard(event);" id="tracklist-button" data-copytarget="#tracklist" class="btn btn-primary pull-right">Copy history to clipboard</button>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -40,6 +54,7 @@
                                     <th>Song</th>
                                     <th>Artist</th>
                                     <th>Album</th>
+                                    <th></th>
                                     <th></th>
                                     <th></th>
                                 </tr>
@@ -50,12 +65,12 @@
                                     <td name="artist"></td>
                                     <td name="album"></td>
                                     <td name="replay">
-                                        <button name="replay-button" onclick="setSong(this.id);">
+                                        <button class="btn btn-primary btn-xs" name="replay-button" title="Play this song" onclick="replaySong(this);">
                                             <span class="glyphicon glyphicon-play"></span>
                                         </button>
                                     </td>
                                     <td name="delete">
-                                        <button name="delete-button" onclick="removeFromHistory(this)">
+                                        <button class="btn btn-danger btn-xs" name="delete-button" title="Remove this song from history" onclick="removeFromHistory(this)">
                                             <span class="glyphicon glyphicon-minus"></span>
                                         </button>
                                     </td>
