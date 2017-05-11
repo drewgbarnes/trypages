@@ -48,6 +48,7 @@ function getRandomSong(clicked = true) {
             //search will not return tracks if offset > query result
             if (data.tracks.items.length == 0) {
                 getRandomSong();
+                return;
             }
             var track = data.tracks.items[0];
             setSong(track.id);
@@ -60,6 +61,7 @@ function getRandomSong(clicked = true) {
     });
 }
 
+//maybe we can just call setSong from the html
 function replaySong(replayButton) {
     setSong(replayButton.dataset.spotifyId);
 }
@@ -93,21 +95,19 @@ function addToHistory(track, artist, album, id) {
     node.parentNode.insertBefore(copy, node);
 }
 
-// el.addEventListener("animationend", animationEnded, false);
-// function animationEnded(e) {
-//     e.target.classList.remove('animated', 'fadeIn');
-// }
+function animationEnded(e) {
+    e.target.classList.remove('animated', 'fadeIn');
+}
 
 function clearAlert() {
     let el = document.getElementById('tracklist-button');
-    el.classList.remove('animated', 'fadeIn');
     el.innerHTML = 'Copy history to clipboard';
     el.classList.add('animated', 'fadeIn');
+    el.addEventListener("animationend", animationEnded, false);
 }
 
 function alertCopied() {
     let el = document.getElementById('tracklist-button');
-    el.classList.remove('animated', 'fadeIn');
     //setting content in JS is probs a bad idea
     let song_text = ' song';
     if (globalHistory.length > 1) {
@@ -115,6 +115,7 @@ function alertCopied() {
     }
     el.innerHTML = globalHistory.length + song_text + ' added to clipboard!';
     el.classList.add('animated', 'fadeIn');
+    el.addEventListener("animationend", animationEnded, false);
 
     setTimeout(clearAlert, 5000);
 }
