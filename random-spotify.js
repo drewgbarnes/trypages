@@ -2,14 +2,12 @@
 TODO^:
 1>
 2>
-show instructions for what to do when songs are copied
-"Go to the Spotify desktop app and paste (Ctrl/Cmd+V or Edit Menu -> paste)"
-show copy success
 3>
 delete all button
 there may be duplicates in the history?
 insertBefore not insertAfter
 4>
+make functions general
 random inline TODOs
 closures
 DRY
@@ -62,7 +60,7 @@ function getRandomSong(clicked = true) {
     });
 }
 
-function replaySong(replayButton){
+function replaySong(replayButton) {
     setSong(replayButton.dataset.spotifyId);
 }
 
@@ -82,7 +80,7 @@ function addToHistory(track, artist, album, id) {
     var copy = node.cloneNode(true);
 
     globalHistory.push(id);
-    
+
     copy.style.display = "table-row";
     copy.removeAttribute('id');
 
@@ -95,7 +93,33 @@ function addToHistory(track, artist, album, id) {
     node.parentNode.insertBefore(copy, node);
 }
 
-function copyToClipboard(e){
+// el.addEventListener("animationend", animationEnded, false);
+// function animationEnded(e) {
+//     e.target.classList.remove('animated', 'fadeIn');
+// }
+
+function clearAlert() {
+    let el = document.getElementById('tracklist-button');
+    el.classList.remove('animated', 'fadeIn');
+    el.innerHTML = 'Copy history to clipboard';
+    el.classList.add('animated', 'fadeIn');
+}
+
+function alertCopied() {
+    let el = document.getElementById('tracklist-button');
+    el.classList.remove('animated', 'fadeIn');
+    //setting content in JS is probs a bad idea
+    let song_text = ' song';
+    if (globalHistory.length > 1) {
+        song_text += 's';
+    }
+    el.innerHTML = globalHistory.length + song_text + ' added to clipboard!';
+    el.classList.add('animated', 'fadeIn');
+
+    setTimeout(clearAlert, 5000);
+}
+
+function copyToClipboard(e) {
     var text_node = document.querySelector('#tracklist');
     //find easier way to do this
     var url_prefix = 'https://open.spotify.com/track/';
@@ -104,10 +128,10 @@ function copyToClipboard(e){
         s += url_prefix + globalHistory[i] + '\n';
     }
     text_node.value = s;
-    doCopy(e);
+    doCopy(e, alertCopied);
 }
 
-function doCopy(e) {
+function doCopy(e, callback) {
     var
         t = e.target,
         c = t.dataset.copytarget,
@@ -118,6 +142,7 @@ function doCopy(e) {
         try {
             document.execCommand('copy');
             inp.blur();
+            callback();
         } catch (err) {
             alert('Please press Ctrl/Cmd+C to copy');
         }

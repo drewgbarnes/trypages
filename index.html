@@ -25,6 +25,24 @@
     .top-pad {
         margin-top: 20px;
     }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    
+    .fadeIn {
+        animation-name: fadeIn;
+    }
+    
+    .animated {
+        animation-duration: 1.5s;
+        animation-fill-mode: both;
+    }
     </style>
     <script type="text/javascript" src="spotify-web-api.js"></script>
     <script type="text/javascript" src="random-spotify.js"></script>
@@ -65,7 +83,7 @@
                                     <td name="artist"></td>
                                     <td name="album"></td>
                                     <td name="replay">
-                                        <button class="btn btn-primary btn-xs" name="replay-button" title="Play this song" onclick="replaySong(this);">
+                                        <button class="btn btn-success btn-xs" name="replay-button" title="Play this song" onclick="replaySong(this);">
                                             <span class="glyphicon glyphicon-play"></span>
                                         </button>
                                     </td>
@@ -81,6 +99,7 @@
                 </div>
             </div>
         </div>
+        <p class="text-center">After songs are copied to your clipboard: go to the Spotify desktop app, open a playlist, and paste (Ctrl/Cmd+V or Edit Menu -> paste)</p>
     </div>
     <script>
     var everythingLoaded = setInterval(function() {
