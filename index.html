@@ -3,56 +3,23 @@
 
 <head>
     <title>Random Spotify Song Generator</title>
+    <meta name="description" content="Random Spotify Song Generator">
+    <link id="favicon" rel="icon" href="favicon.ico" type="image/x-icon">
+    <!-- review what these 3 do exactly -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <style type="text/css">
-    body {
-        background-color: rgb(40, 40, 40);
-    }
-    
-    .spotify {
-        background-color: rgb(29, 185, 84);
-    }
-    
-    .history {
-        display: inline-flex;
-    }
-    
-    .offscreen {
-        position: absolute;
-        margin-left: -9999px;
-    }
-    
-    .top-pad {
-        margin-top: 20px;
-    }
-    
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
-    
-    .fadeIn {
-        animation-name: fadeIn;
-    }
-    
-    .animated {
-        animation-duration: 1.5s;
-        animation-fill-mode: both;
-    }
-    </style>
+    <link rel="stylesheet" href="random-spotify-vanilla.css">
     <script type="text/javascript" src="spotify-web-api.js"></script>
-    <script type="text/javascript" src="random-spotify.js"></script>
+    <script type="text/javascript" src="random-spotify-vanilla.js"></script>
 </head>
 
 <body>
     <div class="container spotify">
         <div class="row top-pad">
             <div class="col-md-12 text-center">
-                <button class="btn btn-primary btn-lg" onclick="getRandomSong();" id="ok">Get a random song from Spotify!</button>
+                <button class="btn btn-primary btn-lg" onclick="getRandomSong();" id="get-song">Get a random song from Spotify!</button>
                 <hr>
             </div>
         </div>
@@ -63,8 +30,8 @@
             <div class="col-md-8">
                 <div class="well">
                     <h2 class="history">History</h2>
-                    <textarea class="offscreen" type="text" id="tracklist" value=""></textarea>
-                    <button onclick="copyToClipboard(event);" id="tracklist-button" data-copytarget="#tracklist" class="btn btn-primary pull-right">Copy history to clipboard</button>
+                    <textarea class="offscreen" type="text" id="history-copy-area" value=""></textarea>
+                    <button onclick="copyToClipboard(event);" id="history-copy-button" data-copytarget="#history-copy-area" class="btn btn-primary pull-right">Copy history to clipboard</button>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -73,11 +40,14 @@
                                     <th>Artist</th>
                                     <th>Album</th>
                                     <th></th>
-                                    <th></th>
-                                    <th></th>
+                                    <th>
+                                        <button class="btn btn-danger btn-xs" name="delete-all-button" title="Remove all songs from history" onclick="removeAllFromHistory()">
+                                            <span class="glyphicon glyphicon-minus"></span>
+                                        </button>
+                                    </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="history">
                                 <tr id="history-clone" style="display: none">
                                     <td name="song"></td>
                                     <td name="artist"></td>

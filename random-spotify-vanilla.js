@@ -3,7 +3,6 @@ TODO^:
 1>
 2>
 3>
-delete all button
 there may be duplicates in the history?
 insertBefore not insertAfter
 4>
@@ -11,12 +10,17 @@ make functions general
 random inline TODOs
 closures
 DRY
+5>
+vuejs version
+angular version
+react version
 
 ^todo order:
 >1 syntactically functioning
 >2 semantically functioning
 >3 user facing
 >4 good javascript
+>5 future
 */
 
 
@@ -26,7 +30,7 @@ var globalHistory = [];
 
 function getRandomSong(clicked = true) {
     //TODO: only create 1 instance w/ closure?
-    var alphabet = "abcdefghijklmnopqrstuvwxyz";
+    const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
     function getRandomLetter() {
         return alphabet[Math.floor(Math.random() * alphabet.length)];
@@ -37,7 +41,7 @@ function getRandomSong(clicked = true) {
     }
 
     //TODO: only create 1 instance w/ closure?
-    var spotifyApi = new SpotifyWebApi();
+    let spotifyApi = new SpotifyWebApi();
     spotifyApi.searchTracks(getRandomLetter(), {
         limit: 1,
         offset: getRandomNumber()
@@ -55,7 +59,7 @@ function getRandomSong(clicked = true) {
             addToHistory(track.name, track.artists[0].name, track.album.name, track.id);
             if (clicked) {
                 //TODO: this is done every time, only need to do it 1x
-                document.getElementById('ok').innerHTML = "Anotha one";
+                document.getElementById('get-song').innerHTML = "Anotha one";
             }
         }
     });
@@ -77,9 +81,18 @@ function removeFromHistory(deleteButton) {
     globalHistory.splice(globalHistory.indexOf(deleteButton.dataset.spotifyId), 1);
 }
 
+function removeAllFromHistory() {
+    let node = document.getElementById('history');
+    for (let i = node.children.length - 1; i >= 0; i--) {
+        if (node.children[i].id != 'history-clone') {
+            node.children[i].remove();
+        }
+    }
+}
+
 function addToHistory(track, artist, album, id) {
-    var node = document.querySelector('#history-clone');
-    var copy = node.cloneNode(true);
+    let node = document.getElementById('history-clone');
+    let copy = node.cloneNode(true);
 
     globalHistory.push(id);
 
@@ -100,14 +113,15 @@ function animationEnded(e) {
 }
 
 function clearAlert() {
-    let el = document.getElementById('tracklist-button');
+    let el = document.getElementById('history-copy-button');
+    //setting content in JS is probs a bad idea
     el.innerHTML = 'Copy history to clipboard';
     el.classList.add('animated', 'fadeIn');
     el.addEventListener("animationend", animationEnded, false);
 }
 
 function alertCopied() {
-    let el = document.getElementById('tracklist-button');
+    let el = document.getElementById('history-copy-button');
     //setting content in JS is probs a bad idea
     let song_text = ' song';
     if (globalHistory.length > 1) {
@@ -121,11 +135,11 @@ function alertCopied() {
 }
 
 function copyToClipboard(e) {
-    var text_node = document.querySelector('#tracklist');
-    //find easier way to do this
-    var url_prefix = 'https://open.spotify.com/track/';
-    var s = '';
-    for (var i = globalHistory.length - 1; i >= 0; i--) {
+    let text_node = document.getElementById('history-copy-area');
+    //find easier way to do string concat
+    let url_prefix = 'https://open.spotify.com/track/';
+    let s = '';
+    for (let i = globalHistory.length - 1; i >= 0; i--) {
         s += url_prefix + globalHistory[i] + '\n';
     }
     text_node.value = s;
