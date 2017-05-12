@@ -3,8 +3,7 @@ TODO^:
 1>
 2>
 3>
-there may be duplicates in the history?
-insertBefore not insertAfter
+select all/delete selected?
 4>
 make functions general
 random inline TODOs
@@ -54,7 +53,7 @@ function getRandomSong(clicked = true) {
                 getRandomSong();
                 return;
             }
-            var track = data.tracks.items[0];
+            let track = data.tracks.items[0];
             setSong(track.id);
             addToHistory(track.name, track.artists[0].name, track.album.name, track.id);
             if (clicked) {
@@ -71,7 +70,7 @@ function replaySong(replayButton) {
 }
 
 function setSong(track_id) {
-    var embed_prefix = 'https://open.spotify.com/embed?uri=spotify:track:';
+    const embed_prefix = 'https://open.spotify.com/embed?uri=spotify:track:';
     document.getElementById('random-webplayer').src = embed_prefix + track_id;
 }
 
@@ -105,7 +104,7 @@ function addToHistory(track, artist, album, id) {
     copy.children.namedItem('album').innerHTML = album;
     copy.children.namedItem('replay').children.namedItem('replay-button').dataset.spotifyId = id;
     copy.children.namedItem('delete').children.namedItem('delete-button').dataset.spotifyId = id;
-    node.parentNode.insertBefore(copy, node);
+    node.parentNode.insertBefore(copy, node.nextSibling);
 }
 
 function animationEnded(e) {
@@ -137,7 +136,7 @@ function alertCopied() {
 function copyToClipboard(e) {
     let text_node = document.getElementById('history-copy-area');
     //find easier way to do string concat
-    let url_prefix = 'https://open.spotify.com/track/';
+    const url_prefix = 'https://open.spotify.com/track/';
     let s = '';
     for (let i = globalHistory.length - 1; i >= 0; i--) {
         s += url_prefix + globalHistory[i] + '\n';
@@ -147,7 +146,7 @@ function copyToClipboard(e) {
 }
 
 function doCopy(e, callback) {
-    var
+    let
         t = e.target,
         c = t.dataset.copytarget,
         inp = (c ? document.querySelector(c) : null);
