@@ -5,6 +5,7 @@ TODO^:
 3>
 select all/delete selected?
 4>
+remove globalHistory somehow
 make functions general
 random inline TODOs
 closures
@@ -115,22 +116,28 @@ function clearAlert() {
     //setting content in JS is probs a bad idea
     el.innerHTML = 'Copy history to clipboard';
     el.classList.add('animated', 'fadeIn');
-    el.addEventListener("animationend", animationEnded, false);
 }
 
-function alertCopied() {
-    let el = document.getElementById('history-copy-button');
-    //setting content in JS is probs a bad idea
-    let song_text = ' song';
-    if (globalHistory.length > 1) {
-        song_text += 's';
+const alertCopied = (function() {
+    let listener_added = false;
+
+    return function() {
+        let el = document.getElementById('history-copy-button');
+        //setting content in JS is probs a bad idea
+        let song_text = ' song';
+        if (globalHistory.length > 1) {
+            song_text += 's';
+        }
+        el.innerHTML = globalHistory.length + song_text + ' added to clipboard!';
+        el.classList.add('animated', 'fadeIn');
+        if (!listener_added) {
+            listener_added = true;
+            el.addEventListener("animationend", animationEnded, false);
+        }
+
+        setTimeout(clearAlert, 5000);
     }
-    el.innerHTML = globalHistory.length + song_text + ' added to clipboard!';
-    el.classList.add('animated', 'fadeIn');
-    el.addEventListener("animationend", animationEnded, false);
-
-    setTimeout(clearAlert, 5000);
-}
+})();
 
 const copyToClipboard = (function() {
     const url_prefix = 'https://open.spotify.com/track/';
