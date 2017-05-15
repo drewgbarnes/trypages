@@ -27,8 +27,7 @@ react version
 
 var globalHistory = [];
 
-function getRandomSong(clicked = true) {
-    //TODO: only create 1 instance w/ closure?
+const getRandomSong = (function() {
     const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
     function getRandomLetter() {
@@ -39,40 +38,39 @@ function getRandomSong(clicked = true) {
         return Math.floor((Math.random() * 100000) + 1);
     }
 
-    //TODO: only create 1 instance w/ closure?
     let spotifyApi = new SpotifyWebApi();
-    spotifyApi.searchTracks(getRandomLetter(), {
-        limit: 1,
-        offset: getRandomNumber()
-    }, function(err, data) {
-        if (err) {
-            console.error(err);
-        } else {
-            //search will not return tracks if offset > query result
-            if (data.tracks.items.length == 0) {
-                getRandomSong();
-                return;
-            }
-            let track = data.tracks.items[0];
-            setSong(track.id);
-            addToHistory(track.name, track.artists[0].name, track.album.name, track.id);
-            if (clicked) {
-                //TODO: this is done every time, only need to do it 1x
-                document.getElementById('get-song').innerHTML = "Anotha one";
-            }
-        }
-    });
-}
 
-//maybe we can just call setSong from the html
-function replaySong(replayButton) {
-    setSong(replayButton.dataset.spotifyId);
-}
+    return function(clicked = true) {
+        spotifyApi.searchTracks(getRandomLetter(), {
+            limit: 1,
+            offset: getRandomNumber()
+        }, function(err, data) {
+            if (err) {
+                console.error(err);
+            } else {
+                //search will not return tracks if offset > query result
+                if (data.tracks.items.length == 0) {
+                    getRandomSong();
+                    return;
+                }
+                let track = data.tracks.items[0];
+                setSong(track.id);
+                addToHistory(track.name, track.artists[0].name, track.album.name, track.id);
+                if (clicked) {
+                    //TODO: this is done every time, only need to do it 1x
+                    document.getElementById('get-song').innerHTML = "Anotha one";
+                }
+            }
+        });
+    }
+})();
 
-function setSong(track_id) {
+const setSong = (function() {
     const embed_prefix = 'https://open.spotify.com/embed?uri=spotify:track:';
-    document.getElementById('random-webplayer').src = embed_prefix + track_id;
-}
+    return function(track_id) {
+        document.getElementById('random-webplayer').src = embed_prefix + track_id;
+    }
+})();
 
 function removeFromHistory(deleteButton) {
     //this is generally bad if the HTML changes
