@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <div class="container spotify">
+    <div class="container spotify-green">
         <div class="row top-pad">
             <div class="col-md-12 text-center">
                 <button class="btn btn-primary btn-lg" onclick="getRandomSong();" id="get-song">Get a random song from Spotify!</button>
@@ -29,7 +29,7 @@
             </div>
             <div class="col-md-8">
                 <div class="well">
-                    <h2 class="history">History</h2>
+                    <h2 class="inline">History</h2>
                     <textarea class="offscreen" type="text" id="history-copy-area" value=""></textarea>
                     <button onclick="copyToClipboard(event);" id="history-copy-button" data-copytarget="#history-copy-area" class="btn btn-primary pull-right">Copy history to clipboard</button>
                     <div class="table-responsive">
