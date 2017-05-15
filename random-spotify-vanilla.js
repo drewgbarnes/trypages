@@ -85,6 +85,7 @@ function removeAllFromHistory() {
             node.children[i].remove();
         }
     }
+    globalHistory = [];
 }
 
 function addToHistory(track, artist, album, id) {
@@ -131,17 +132,22 @@ function alertCopied() {
     setTimeout(clearAlert, 5000);
 }
 
-function copyToClipboard(e) {
-    let text_node = document.getElementById('history-copy-area');
-    //find easier way to do string concat
+const copyToClipboard = (function() {
     const url_prefix = 'https://open.spotify.com/track/';
-    let s = '';
-    for (let i = globalHistory.length - 1; i >= 0; i--) {
-        s += url_prefix + globalHistory[i] + '\n';
+
+    return function(e) {
+        if (globalHistory.length > 0) {
+            let text_node = document.getElementById('history-copy-area');
+            let s = '';
+            for (let i = globalHistory.length - 1; i >= 0; i--) {
+                s += url_prefix + globalHistory[i] + '\n';
+            }
+
+            text_node.value = s;
+            doCopy(e, alertCopied);
+        }
     }
-    text_node.value = s;
-    doCopy(e, alertCopied);
-}
+})();
 
 function doCopy(e, callback) {
     let
