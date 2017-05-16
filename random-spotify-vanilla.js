@@ -26,7 +26,7 @@ react version
 
 'use strict';
 
-var globalHistory = [];
+let globalHistory = [];
 
 const getRandomSong = (function() {
     const alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -174,7 +174,7 @@ function doCopy(e, callback) {
     }
 }
 
-var everythingLoaded = setInterval(function() {
+let everythingLoaded = setInterval(function() {
     if (/loaded|complete/.test(document.readyState)) {
         clearInterval(everythingLoaded);
         getRandomSong(false);

@@ -11,17 +11,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="random-spotify-vanilla.css">
-    <script type="text/javascript" src="spotify-web-api.js"></script>
-    <script type="text/javascript" src="random-spotify-vanilla.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js" integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00=" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <div class="container spotify-green">
+    <div id="app" class="container spotify-green">
         <div class="row top-pad">
             <div class="col-md-12 text-center">
-                <button class="btn btn-primary btn-lg" onclick="getRandomSong();" id="get-song">Get a random song from Spotify!</button>
-                <button class="btn btn-primary btn-xs">Vanilla JS</button>
-                <button class="btn btn-default btn-xs">Vue JS</button>
+                <button class="btn btn-primary btn-lg" @click="getRandomSong()" id="get-song">Get a random song from Spotify!</button>
+                <button class="btn btn-default btn-xs">Vanilla JS</button>
+                <button class="btn btn-primary btn-xs">Vue JS</button>
                 <!-- <button class="btn btn-default btn-xs">React JS</button> -->
                 <hr>
             </div>
@@ -34,7 +33,7 @@
                 <div class="well">
                     <h2 class="inline">History</h2>
                     <textarea class="offscreen" type="text" id="history-copy-area" value=""></textarea>
-                    <button onclick="copyToClipboard(event);" id="history-copy-button" data-copytarget="#history-copy-area" class="btn btn-primary pull-right">Copy history to clipboard</button>
+                    <button @click="copyToClipboard($event)" id="history-copy-button" data-copytarget="#history-copy-area" class="btn btn-primary pull-right">Copy history to clipboard</button>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -44,24 +43,24 @@
                                     <th>Album</th>
                                     <th></th>
                                     <th>
-                                        <button class="btn btn-danger btn-xs" name="delete-all-button" title="Remove all songs from history" onclick="removeAllFromHistory()">
+                                        <button class="btn btn-danger btn-xs" name="delete-all-button" title="Remove all songs from history" @click="removeAllFromHistory()">
                                             <span class="glyphicon glyphicon-minus"></span>
                                         </button>
                                     </th>
                                 </tr>
                             </thead>
                             <tbody id="history">
-                                <tr id="history-clone" style="display: none">
-                                    <td name="song"></td>
-                                    <td name="artist"></td>
-                                    <td name="album"></td>
+                                <tr v-for="track in globalHistory">
+                                    <td name="song">{{track.song}}</td>
+                                    <td name="artist">{{track.artist}}</td>
+                                    <td name="album">{{track.album}}</td>
                                     <td name="replay">
-                                        <button class="btn btn-success btn-xs" name="replay-button" title="Play this song" onclick="setSong(this.dataset.spotifyId);">
+                                        <button class="btn btn-success btn-xs" name="replay-button" title="Play this song" @click="setSong(track.id);">
                                             <span class="glyphicon glyphicon-play"></span>
                                         </button>
                                     </td>
                                     <td name="delete">
-                                        <button class="btn btn-danger btn-xs" name="delete-button" title="Remove this song from history" onclick="removeFromHistory(this)">
+                                        <button class="btn btn-danger btn-xs" name="delete-button" title="Remove this song from history" @click="removeFromHistory(track.id)">
                                             <span class="glyphicon glyphicon-minus"></span>
                                         </button>
                                     </td>
@@ -74,6 +73,9 @@
         </div>
         <p class="text-center">After songs are copied to your clipboard: go to the Spotify desktop app, open a playlist, and paste (Ctrl/Cmd+V or Edit Menu -> paste)</p>
     </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script type="text/javascript" src="spotify-web-api.js"></script>
+    <script type="text/javascript" src="random-spotify-vue.js"></script>
 </body>
 
 </html>
