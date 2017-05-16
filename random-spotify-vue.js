@@ -30,27 +30,9 @@ let app = new Vue({
     data: { globalHistory: [] },
     methods: {
 
-        setSong: function(track_id) {
-            let embed_prefix = 'https://open.spotify.com/embed?uri=spotify:track:';
-            app.$refs.randomWebplayer.src = embed_prefix + track_id;
-        },
-
-        removeFromHistory: function(id) {
-            for (var i = app.globalHistory.length - 1; i >= 0; i--) {
-                if (app.globalHistory[i].id == id) {
-                    app.globalHistory.splice(i, 1);
-                }
-            }
-        },
-
-        removeAllFromHistory: function() {
-            app.globalHistory = [];
-        },
-
         getRandomSong: function(clicked = true) {
-            let alphabet = "abcdefghijklmnopqrstuvwxyz";
-
             function getRandomLetter() {
+                let alphabet = "abcdefghijklmnopqrstuvwxyz";
                 return alphabet[Math.floor(Math.random() * alphabet.length)];
             }
 
@@ -83,6 +65,28 @@ let app = new Vue({
             });
         },
 
+        setSong: function(track_id) {
+            let embed_prefix = 'https://open.spotify.com/embed?uri=spotify:track:';
+            app.$refs.randomWebplayer.src = embed_prefix + track_id;
+        },
+
+        removeFromHistory: function(id) {
+            for (var i = app.globalHistory.length - 1; i >= 0; i--) {
+                if (app.globalHistory[i].id == id) {
+                    app.globalHistory.splice(i, 1);
+                    return;
+                }
+            }
+        },
+
+        removeAllFromHistory: function() {
+            app.globalHistory = [];
+        },
+
+        addToHistory: function(track, artist, album, id) {
+            app.globalHistory.unshift({ id: id, song: track, artist: artist, album: album });
+        },
+
         copyToClipboard: function(e) {
             let url_prefix = 'https://open.spotify.com/track/';
 
@@ -96,10 +100,6 @@ let app = new Vue({
                 text_node.value = s;
                 app.doCopy(e, app.alertCopied);
             }
-        },
-
-        addToHistory: function(track, artist, album, id) {
-            app.globalHistory.push({ id: id, song: track, artist: artist, album: album });
         },
 
         doCopy: function(e, callback) {
