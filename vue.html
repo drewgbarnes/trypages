@@ -18,7 +18,7 @@
     <div id="app" class="container spotify-green">
         <div class="row top-pad">
             <div class="col-md-12 text-center">
-                <button class="btn btn-primary btn-lg" @click="getRandomSong()" id="get-song">Get a random song from Spotify!</button>
+                <button class="btn btn-primary btn-lg" @click="getRandomSong()" ref="getSong">Get a random song from Spotify!</button>
                 <button class="btn btn-default btn-xs">Vanilla JS</button>
                 <button class="btn btn-primary btn-xs">Vue JS</button>
                 <!-- <button class="btn btn-default btn-xs">React JS</button> -->
@@ -27,13 +27,13 @@
         </div>
         <div class="row">
             <div class="col-md-4">
-                <iframe src="" id="random-webplayer" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+                <iframe src="" ref="randomWebplayer" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
             </div>
             <div class="col-md-8">
                 <div class="well">
                     <h2 class="inline">History</h2>
-                    <textarea class="offscreen" type="text" id="history-copy-area" value=""></textarea>
-                    <button @click="copyToClipboard($event)" id="history-copy-button" data-copytarget="#history-copy-area" class="btn btn-primary pull-right">Copy history to clipboard</button>
+                    <textarea class="offscreen" type="text" ref="historyCopyArea" id="historyCopyArea" value=""></textarea>
+                    <button @click="copyToClipboard($event)" ref="historyCopyButton" data-copytarget="#historyCopyArea" class="btn btn-primary pull-right">Copy history to clipboard</button>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -49,7 +49,7 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody id="history">
+                            <tbody>
                                 <tr v-for="track in globalHistory">
                                     <td name="song">{{track.song}}</td>
                                     <td name="artist">{{track.artist}}</td>

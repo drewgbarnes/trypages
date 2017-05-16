@@ -1,6 +1,7 @@
 /*
 TODO^:
 1>
+hookup version buttons
 2>
 3>
 4>
@@ -30,8 +31,8 @@ let app = new Vue({
     methods: {
 
         setSong: function(track_id) {
-            const embed_prefix = 'https://open.spotify.com/embed?uri=spotify:track:';
-            document.getElementById('random-webplayer').src = embed_prefix + track_id;
+            let embed_prefix = 'https://open.spotify.com/embed?uri=spotify:track:';
+            app.$refs.randomWebplayer.src = embed_prefix + track_id;
         },
 
         removeFromHistory: function(id) {
@@ -47,7 +48,7 @@ let app = new Vue({
         },
 
         getRandomSong: function(clicked = true) {
-            const alphabet = "abcdefghijklmnopqrstuvwxyz";
+            let alphabet = "abcdefghijklmnopqrstuvwxyz";
 
             function getRandomLetter() {
                 return alphabet[Math.floor(Math.random() * alphabet.length)];
@@ -76,17 +77,17 @@ let app = new Vue({
                     app.addToHistory(track.name, track.artists[0].name, track.album.name, track.id);
                     if (clicked) {
                         //TODO: this is done every time, only need to do it 1x
-                        document.getElementById('get-song').innerHTML = "Anotha one";
+                        app.$refs.getSong.innerHTML = "Anotha one";
                     }
                 }
             });
         },
 
         copyToClipboard: function(e) {
-            const url_prefix = 'https://open.spotify.com/track/';
+            let url_prefix = 'https://open.spotify.com/track/';
 
             if (app.globalHistory.length > 0) {
-                let text_node = document.getElementById('history-copy-area');
+                let text_node = app.$refs.historyCopyArea;
                 let s = '';
                 for (let i = app.globalHistory.length - 1; i >= 0; i--) {
                     s += url_prefix + app.globalHistory[i].id + '\n';
@@ -122,7 +123,7 @@ let app = new Vue({
         alertCopied: function() {
             let listener_added = false;
 
-            let el = document.getElementById('history-copy-button');
+            let el = app.$refs.historyCopyButton;
             //setting content in JS is probs a bad idea
             let song_text = ' song';
             if (app.globalHistory.length > 1) {
@@ -139,7 +140,7 @@ let app = new Vue({
         },
 
         clearAlert: function() {
-            let el = document.getElementById('history-copy-button');
+            let el = app.$refs.historyCopyButton;
             //setting content in JS is probs a bad idea
             el.innerHTML = 'Copy history to clipboard';
             el.classList.add('animated', 'fadeIn');
