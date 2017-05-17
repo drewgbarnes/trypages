@@ -18,14 +18,16 @@
 <body>
     <div class="container spotify-green">
         <div class="row top-pad">
-            <div class="col-md-12 text-center">
+            <div class="col-md-6 col-md-offset-3 text-center">
                 <button class="btn btn-primary btn-lg" onclick="getRandomSong();" id="get-song">Get a random song from Spotify!</button>
+            </div>
+            <div class="col-md-3">
                 <a class="btn btn-primary btn-xs" href="index.html">Vanilla JS</a>
                 <a class="btn btn-default btn-xs" href="vue.html">Vue JS</a>
                 <a class="btn btn-default disabled btn-xs" href="vue.html">React JS</a>
-                <hr>
             </div>
         </div>
+        <hr>
         <div class="row">
             <div class="col-md-4">
                 <iframe src="" id="random-webplayer" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>

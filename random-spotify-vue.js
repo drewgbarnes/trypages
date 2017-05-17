@@ -2,7 +2,6 @@
 TODO^:
 1>
 2>
-hookup version buttons
 3>
 4>
 redo copy logic for vuejs
