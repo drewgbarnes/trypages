@@ -6,6 +6,7 @@ TODO^:
 version css padding messed up
 double fade??
 4>
+dont use in browser babel
 5>
 
 ^todo order:
