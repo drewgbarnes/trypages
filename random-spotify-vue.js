@@ -20,12 +20,7 @@ redo copy logic for vuejs
 let app = new Vue({
     el: '#app',
     created: function() {
-        let everythingLoaded = setInterval(function() {
-            if (/loaded|complete/.test(document.readyState)) {
-                clearInterval(everythingLoaded);
-                app.getRandomSong(false);
-            }
-        }, 10);
+        this.getRandomSong(false);
     },
     data: { globalHistory: [] },
     methods: {
