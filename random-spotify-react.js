@@ -292,7 +292,7 @@ class CopyButton extends React.Component {
             <button 
                 onClick={this.alertCopied} 
                 data-copytarget="#historyCopyArea" 
-                className="btn btn-primary pull-right">
+                className={"btn btn-primary pull-right" + (copy ? ' animated fadeIn':'')}>
                 {button_text}
             </button>
         );
