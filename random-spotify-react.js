@@ -268,15 +268,17 @@ class CopyButton extends React.Component {
     }
 
     alertCopied(e) {
-        this.setState({ copy: true });
-        this.props.doCopy(e);
+        if (this.props.total > 0) {
+            this.setState({ copy: true });
+            this.props.doCopy(e);
+        }
     }
 
     render() {
         const copy = this.state.copy;
         const total = this.props.total;
         let button_text = 'Copy history to clipboard';
-        if (copy) {
+        if (copy && total > 0) {
             button_text = total > 1 ? ' songs' : ' song';
             button_text = total + button_text + ' added to clipboard!';
             setTimeout(this.clearAlert, 5000);
