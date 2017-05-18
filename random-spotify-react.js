@@ -4,6 +4,7 @@ TODO^:
 2>
 3>
 version css padding messed up
+double fade??
 4>
 5>
 
@@ -64,7 +65,7 @@ class App extends React.Component {
     }
 
     removeFromHistory(event) {
-        let id = event.currentTarget.value;
+        const id = event.currentTarget.value;
 
         this.setState(function(prevState) {
             let t = prevState.tracks;
@@ -85,7 +86,7 @@ class App extends React.Component {
             this.getSong();
             return;
         }
-        let track = data.tracks.items[0];
+        const track = data.tracks.items[0];
         this.setTracks(track);
     }
 
@@ -138,7 +139,7 @@ function Header(props) {
 }
 
 function GetButton(props) {
-    let text = props.clicked ? "Anotha One" : "Get a random song from Spotify!";
+    const text = props.clicked ? "Anotha One" : "Get a random song from Spotify!";
     return (
         <div className="col-md-6 col-md-offset-3 text-center">
             <button className="btn btn-primary btn-lg" onClick={props.getSong}>
