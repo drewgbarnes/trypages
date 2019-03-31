@@ -3,17 +3,18 @@ TODO^:
 1>
 2>
 3>
-select all/delete selected?
+make this a general playlist building tool
+play music in background while searching
+select/copy/delete selected?
 4>
-remove globalHistory somehow
 make functions general
+move general functions into shared files for use between different frameworks
 random inline TODOs
-closures
 DRY
+remove globalHistory somehow
+closures
 5>
-vuejs version
 angular version
-react version
 
 ^todo order:
 >1 syntactically functioning
@@ -27,51 +28,70 @@ react version
 
 let globalHistory = [];
 
+const getAccessToken = () => {
+    const clientId = "3bdb037d4f41494aaf9104ae6df1fd85";
+    const redirectURI = encodeURIComponent("http://localhost:8888/");
+    window.location.replace(
+        `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectURI}&response_type=token`
+    );
+};
+
 const getRandomSong = (function() {
     const alphabet = "abcdefghijklmnopqrstuvwxyz";
-
     function getRandomLetter() {
         return alphabet[Math.floor(Math.random() * alphabet.length)];
     }
 
-    function getRandomNumber() {
-        return Math.floor(Math.random() * 100000 + 1);
+    function getRandomNumberLessThan(lessThan) {
+        return Math.floor(Math.random() * lessThan);
     }
 
-    let spotifyApi = new SpotifyWebApi();
+    const access_token = window.location.hash
+        .split("&")[0]
+        .split("#access_token=")[1];
 
-    return function(clicked = true) {
+    if (!access_token) {
+        getAccessToken();
+    }
+
+    const spotifyApi = new SpotifyWebApi();
+    spotifyApi.setAccessToken(access_token);
+
+    function searchCallback(err, data) {
+        if (err) {
+            // TODO: show an error to the user
+            console.error(err);
+        } else {
+            //search will not return tracks if offset > query result
+            if (data.tracks.items.length == 0) {
+                getRandomSong();
+                return;
+            }
+            let track = data.tracks.items[0];
+            setSong(track.id);
+            addToHistory(
+                track.name,
+                track.artists[0].name,
+                track.album.name,
+                track.id
+            );
+        }
+    }
+
+    return function(buttonClicked = true) {
         spotifyApi.searchTracks(
             getRandomLetter(),
             {
                 limit: 1,
-                offset: getRandomNumber()
+                offset: getRandomNumberLessThan(10000)
             },
-            function(err, data) {
-                if (err) {
-                    console.error(err);
-                } else {
-                    //search will not return tracks if offset > query result
-                    if (data.tracks.items.length == 0) {
-                        getRandomSong();
-                        return;
-                    }
-                    let track = data.tracks.items[0];
-                    setSong(track.id);
-                    addToHistory(
-                        track.name,
-                        track.artists[0].name,
-                        track.album.name,
-                        track.id
-                    );
-                    if (clicked) {
-                        //TODO: this is done every time, only need to do it 1x
-                        document.getElementById("get-song").innerHTML =
-                            "Anotha one";
-                    }
-                }
-            }
+            searchCallback
         );
+
+        if (buttonClicked) {
+            //TODO: this is done every time, only need to do it 1x
+            document.getElementById("get-song").innerHTML = "Anotha one!";
+        }
     };
 })();
 
@@ -84,7 +104,7 @@ const setSong = (function() {
 })();
 
 function removeFromHistory(deleteButton) {
-    //this is generally bad if the HTML changes
+    // this is generally bad if the HTML changes
     deleteButton.parentElement.parentElement.remove();
     globalHistory.splice(
         globalHistory.indexOf(deleteButton.dataset.spotifyId),

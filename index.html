@@ -14,7 +14,7 @@
     <script type="text/javascript" src="spotify-web-api.js"></script>
     <script type="text/javascript" src="random-spotify-vanilla.js"></script>
     <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
@@ -27,7 +27,7 @@
     <div class="container spotify-green">
         <div class="row top-pad">
             <div class="col-md-6 col-md-offset-3 text-center">
-                <button class="btn btn-primary btn-lg" onclick="getRandomSong();" id="get-song">Get a random song from Spotify!</button>
+                <button class="btn btn-secondary btn-lg" onclick="getRandomSong()" id="get-song">Get a random song from Spotify!</button>
             </div>
             <div class="col-md-3">
                 <a class="btn btn-primary btn-xs" href="index.html">Vanilla JS</a>
@@ -35,7 +35,7 @@
                 <a class="btn btn-default btn-xs" href="react.html">React JS</a>
             </div>
         </div>
-        <hr/>
+        <hr />
         <div class="row">
             <div class="col-md-4">
                 <iframe src="" id="random-webplayer" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
@@ -44,7 +44,7 @@
                 <div class="well">
                     <h2 class="inline">History</h2>
                     <textarea class="offscreen" type="text" id="history-copy-area" value=""></textarea>
-                    <button onclick="copyToClipboard(event);" id="history-copy-button" data-copytarget="#history-copy-area" class="btn btn-primary pull-right">Copy history to clipboard</button>
+                    <button onclick="copyToClipboard(event)" id="history-copy-button" data-copytarget="#history-copy-area" class="btn btn-primary pull-right">Copy history to clipboard</button>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -66,7 +66,7 @@
                                     <td name="artist"></td>
                                     <td name="album"></td>
                                     <td name="replay">
-                                        <button class="btn btn-success btn-xs" name="replay-button" title="Play this song" onclick="setSong(this.dataset.spotifyId);">
+                                        <button class="btn btn-success btn-xs" name="replay-button" title="Play this song" onclick="setSong(this.dataset.spotifyId)">
                                             <span class="glyphicon glyphicon-play"></span>
                                         </button>
                                     </td>
@@ -82,7 +82,7 @@
                 </div>
             </div>
         </div>
-        <p class="text-center">After songs are copied to your clipboard: go to the Spotify desktop app, open a playlist, and paste (Ctrl/Cmd+V or Edit Menu -> paste)</p>
+        <p class="text-center">After songs are copied to your clipboard: go to the Spotify desktop app, open a playlist, and paste (Ctrl/Cmd+V or Edit Menu -> Paste)</p>
     </div>
 </body>
 
