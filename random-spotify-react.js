@@ -17,13 +17,13 @@ dont use in browser babel
 >5 future
 */
 
-'use strict';
+"use strict";
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.spotifyApi = new SpotifyWebApi();
-        this.state = { trackId: '', clicked: false, tracks: [] };
+        this.state = { trackId: "", clicked: false, tracks: [] };
         this.getSong = this.getSong.bind(this);
         this.getAndSetTracks = this.getAndSetTracks.bind(this);
         this.playSong = this.playSong.bind(this);
@@ -41,7 +41,7 @@ class App extends React.Component {
     }
 
     getRandomNumber() {
-        return Math.floor((Math.random() * 100000) + 1);
+        return Math.floor(Math.random() * 100000 + 1);
     }
 
     getSong(event) {
@@ -49,12 +49,14 @@ class App extends React.Component {
             this.setClicked(true);
         }
 
-        this.spotifyApi.searchTracks(this.getRandomLetter(), {
-            limit: 1,
-            offset: this.getRandomNumber()
-        }).then(this.getAndSetTracks, (err) => {
-            console.error(err);
-        });
+        this.spotifyApi
+            .searchTracks(this.getRandomLetter(), {
+                limit: 1,
+                offset: this.getRandomNumber()
+            })
+            .then(this.getAndSetTracks, err => {
+                console.error(err);
+            });
     }
 
     playSong(event) {
@@ -78,7 +80,7 @@ class App extends React.Component {
             }
             return {
                 tracks: t
-            }
+            };
         });
     }
 
@@ -103,7 +105,7 @@ class App extends React.Component {
             return {
                 tracks: t,
                 trackId: track.id
-            }
+            };
         });
     }
 
@@ -115,32 +117,38 @@ class App extends React.Component {
         const tracks = this.state.tracks;
         return (
             <div className="container spotify-green">
-                <Header getSong={this.getSong} clicked={this.state.clicked}/>
-                <hr/>
-                <Body 
-                    trackId={this.state.trackId} 
-                    tracks={tracks} 
-                    playSong={this.playSong} 
+                <Header getSong={this.getSong} clicked={this.state.clicked} />
+                <hr />
+                <Body
+                    trackId={this.state.trackId}
+                    tracks={tracks}
+                    playSong={this.playSong}
                     removeFromHistory={this.removeFromHistory}
                     removeAllFromHistory={this.removeAllFromHistory}
-                    />
-                <p className="text-center">After songs are copied to your clipboard: go to the Spotify desktop app, open a playlist, and paste (Ctrl/Cmd+V or Edit Menu -> paste)</p>
+                />
+                <p className="text-center">
+                    After songs are copied to your clipboard: go to the Spotify
+                    desktop app, open a playlist, and paste (Ctrl/Cmd+V or Edit
+                    Menu -> paste)
+                </p>
             </div>
-        )
+        );
     }
 }
 
 function Header(props) {
     return (
         <div className="row top-pad">
-            <GetButton getSong={props.getSong} clicked={props.clicked}/>
+            <GetButton getSong={props.getSong} clicked={props.clicked} />
             <VersionButtons />
         </div>
     );
 }
 
 function GetButton(props) {
-    const text = props.clicked ? "Anotha One" : "Get a random song from Spotify!";
+    const text = props.clicked
+        ? "Anotha One"
+        : "Get a random song from Spotify!";
     return (
         <div className="col-md-6 col-md-offset-3 text-center">
             <button className="btn btn-primary btn-lg" onClick={props.getSong}>
@@ -153,9 +161,15 @@ function GetButton(props) {
 function VersionButtons(props) {
     return (
         <div className="col-md-3">
-            <a className="btn btn-default btn-xs" href="index.html">Vanilla JS</a>
-            <a className="btn btn-default btn-xs" href="vue.html">Vue JS</a>
-            <a className="btn btn-primary btn-xs" href="react.html">React JS</a>
+            <a className="btn btn-default btn-xs" href="index.html">
+                Vanilla JS
+            </a>
+            <a className="btn btn-default btn-xs" href="vue.html">
+                Vue JS
+            </a>
+            <a className="btn btn-primary btn-xs" href="react.html">
+                React JS
+            </a>
         </div>
     );
 }
@@ -163,13 +177,13 @@ function VersionButtons(props) {
 function Body(props) {
     return (
         <div className="row">
-            <SpotifyFrame src={props.trackId}/>
-            <History 
-                tracks={props.tracks} 
-                playSong={props.playSong} 
+            <SpotifyFrame src={props.trackId} />
+            <History
+                tracks={props.tracks}
+                playSong={props.playSong}
                 removeFromHistory={props.removeFromHistory}
                 removeAllFromHistory={props.removeAllFromHistory}
-                />
+            />
         </div>
     );
 }
@@ -180,11 +194,18 @@ class SpotifyFrame extends React.Component {
     }
 
     render() {
-        const embed_prefix = 'https://open.spotify.com/embed?uri=spotify:track:';
-        let src = this.props.src ? embed_prefix + this.props.src : '';
+        const embed_prefix =
+            "https://open.spotify.com/embed?uri=spotify:track:";
+        let src = this.props.src ? embed_prefix + this.props.src : "";
         return (
             <div className="col-md-4">
-                <iframe src={src} width="300" height="380" frameBorder="0" allowTransparency="true"></iframe>
+                <iframe
+                    src={src}
+                    width="300"
+                    height="380"
+                    frameBorder="0"
+                    allowTransparency="true"
+                />
             </div>
         );
     }
@@ -201,9 +222,9 @@ class History extends React.Component {
                 <div className="well">
                     <h2 className="inline">History</h2>
                     <HistoryCopy tracks={this.props.tracks} />
-                    <HistoryTable 
-                        tracks={this.props.tracks} 
-                        playSong={this.props.playSong} 
+                    <HistoryTable
+                        tracks={this.props.tracks}
+                        playSong={this.props.playSong}
                         removeFromHistory={this.props.removeFromHistory}
                         removeAllFromHistory={this.props.removeAllFromHistory}
                     />
@@ -220,29 +241,28 @@ class HistoryCopy extends React.Component {
     }
 
     listToNewlineString() {
-        const url_prefix = 'https://open.spotify.com/track/';
-        let s = '';
+        const url_prefix = "https://open.spotify.com/track/";
+        let s = "";
         if (this.props.tracks.length > 0) {
             for (let i = this.props.tracks.length - 1; i >= 0; i--) {
-                s += url_prefix + this.props.tracks[i].id + '\n';
+                s += url_prefix + this.props.tracks[i].id + "\n";
             }
         }
         return s;
     }
 
     doCopy(e) {
-        let
-            t = e.target,
+        let t = e.target,
             c = t.dataset.copytarget,
-            inp = (c ? document.querySelector(c) : null);
+            inp = c ? document.querySelector(c) : null;
 
         if (inp && inp.select) {
             inp.select();
             try {
-                document.execCommand('copy');
+                document.execCommand("copy");
                 inp.blur();
             } catch (err) {
-                alert('Please press Ctrl/Cmd+C to copy');
+                alert("Please press Ctrl/Cmd+C to copy");
             }
         }
     }
@@ -250,8 +270,16 @@ class HistoryCopy extends React.Component {
     render() {
         return (
             <div className="inline pull-right">
-                <textarea id="historyCopyArea" className="offscreen" type="text" value={this.listToNewlineString(this.props.tracks)}></textarea>
-                <CopyButton total={this.props.tracks.length} doCopy={this.doCopy}/>
+                <textarea
+                    id="historyCopyArea"
+                    className="offscreen"
+                    type="text"
+                    value={this.listToNewlineString(this.props.tracks)}
+                />
+                <CopyButton
+                    total={this.props.tracks.length}
+                    doCopy={this.doCopy}
+                />
             </div>
         );
     }
@@ -279,10 +307,10 @@ class CopyButton extends React.Component {
     render() {
         const copy = this.state.copy;
         const total = this.props.total;
-        let button_text = 'Copy history to clipboard';
+        let button_text = "Copy history to clipboard";
         if (copy && total > 0) {
-            button_text = total > 1 ? ' songs' : ' song';
-            button_text = total + button_text + ' added to clipboard!';
+            button_text = total > 1 ? " songs" : " song";
+            button_text = total + button_text + " added to clipboard!";
             setTimeout(this.clearAlert, 5000);
         }
 
@@ -291,10 +319,14 @@ class CopyButton extends React.Component {
         // el.classList.remove('animated', 'fadeIn');
 
         return (
-            <button 
-                onClick={this.alertCopied} 
-                data-copytarget="#historyCopyArea" 
-                className={"btn btn-primary pull-right" + (copy ? ' animated fadeIn':'')}>
+            <button
+                onClick={this.alertCopied}
+                data-copytarget="#historyCopyArea"
+                className={
+                    "btn btn-primary pull-right" +
+                    (copy ? " animated fadeIn" : "")
+                }
+            >
                 {button_text}
             </button>
         );
@@ -309,12 +341,14 @@ class HistoryTable extends React.Component {
         return (
             <div className="table-responsive">
                 <table className="table">
-                        <HistoryTableHeader removeAllFromHistory={this.props.removeAllFromHistory}/>
-                        <HistoryTableBody 
-                            tracks={this.props.tracks} 
-                            playSong={this.props.playSong} 
-                            removeFromHistory={this.props.removeFromHistory}
-                            />
+                    <HistoryTableHeader
+                        removeAllFromHistory={this.props.removeAllFromHistory}
+                    />
+                    <HistoryTableBody
+                        tracks={this.props.tracks}
+                        playSong={this.props.playSong}
+                        removeFromHistory={this.props.removeFromHistory}
+                    />
                 </table>
             </div>
         );
@@ -332,10 +366,14 @@ class HistoryTableHeader extends React.Component {
                     <th>Song</th>
                     <th>Artist</th>
                     <th>Album</th>
-                    <th></th>
+                    <th />
                     <th>
-                        <button onClick={this.props.removeAllFromHistory} className="btn btn-danger btn-xs" title="Remove all songs from history">
-                            <span className="glyphicon glyphicon-minus"></span>
+                        <button
+                            onClick={this.props.removeAllFromHistory}
+                            className="btn btn-danger btn-xs"
+                            title="Remove all songs from history"
+                        >
+                            <span className="glyphicon glyphicon-minus" />
                         </button>
                     </th>
                 </tr>
@@ -350,8 +388,8 @@ class HistoryTableBody extends React.Component {
     }
     render() {
         const tracks = this.props.tracks;
-        const rows = tracks.map((track) =>
-            <HistoryTableRow 
+        const rows = tracks.map(track => (
+            <HistoryTableRow
                 key={track.id}
                 id={track.id}
                 song={track.song}
@@ -359,13 +397,9 @@ class HistoryTableBody extends React.Component {
                 album={track.album}
                 playSong={this.props.playSong}
                 removeFromHistory={this.props.removeFromHistory}
-                />
-        );
-        return (
-            <tbody>
-                {rows}
-            </tbody>
-        );
+            />
+        ));
+        return <tbody>{rows}</tbody>;
     }
 }
 
@@ -376,20 +410,27 @@ function HistoryTableRow(props) {
             <td>{props.artist}</td>
             <td>{props.album}</td>
             <td>
-                <button value={props.id} onClick={props.playSong} className="btn btn-success btn-xs" title="Play this song">
-                    <span className="glyphicon glyphicon-play"></span>
+                <button
+                    value={props.id}
+                    onClick={props.playSong}
+                    className="btn btn-success btn-xs"
+                    title="Play this song"
+                >
+                    <span className="glyphicon glyphicon-play" />
                 </button>
             </td>
             <td>
-                <button value={props.id} onClick={props.removeFromHistory} className="btn btn-danger btn-xs" title="Remove this song from history">
-                    <span className="glyphicon glyphicon-minus"></span>
+                <button
+                    value={props.id}
+                    onClick={props.removeFromHistory}
+                    className="btn btn-danger btn-xs"
+                    title="Remove this song from history"
+                >
+                    <span className="glyphicon glyphicon-minus" />
                 </button>
             </td>
         </tr>
     );
 }
 
-ReactDOM.render(
-    <App />,
-    document.getElementById('app')
-);
+ReactDOM.render(<App />, document.getElementById("app"));

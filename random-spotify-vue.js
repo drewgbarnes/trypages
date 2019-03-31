@@ -15,16 +15,15 @@ redo copy logic for vuejs
 >5 future
 */
 
-'use strict';
+"use strict";
 
 let app = new Vue({
-    el: '#app',
+    el: "#app",
     created: function() {
         this.getRandomSong(false);
     },
     data: { globalHistory: [] },
     methods: {
-
         getRandomSong: function(clicked = true) {
             function getRandomLetter() {
                 let alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -32,36 +31,46 @@ let app = new Vue({
             }
 
             function getRandomNumber() {
-                return Math.floor((Math.random() * 100000) + 1);
+                return Math.floor(Math.random() * 100000 + 1);
             }
 
             let spotifyApi = new SpotifyWebApi();
 
-            spotifyApi.searchTracks(getRandomLetter(), {
-                limit: 1,
-                offset: getRandomNumber()
-            }, function(err, data) {
-                if (err) {
-                    console.error(err);
-                } else {
-                    //search will not return tracks if offset > query result
-                    if (data.tracks.items.length == 0) {
-                        app.getRandomSong();
-                        return;
-                    }
-                    let track = data.tracks.items[0];
-                    app.setSong(track.id);
-                    app.addToHistory(track.name, track.artists[0].name, track.album.name, track.id);
-                    if (clicked) {
-                        //TODO: this is done every time, only need to do it 1x
-                        app.$refs.getSong.innerHTML = "Anotha one";
+            spotifyApi.searchTracks(
+                getRandomLetter(),
+                {
+                    limit: 1,
+                    offset: getRandomNumber()
+                },
+                function(err, data) {
+                    if (err) {
+                        console.error(err);
+                    } else {
+                        //search will not return tracks if offset > query result
+                        if (data.tracks.items.length == 0) {
+                            app.getRandomSong();
+                            return;
+                        }
+                        let track = data.tracks.items[0];
+                        app.setSong(track.id);
+                        app.addToHistory(
+                            track.name,
+                            track.artists[0].name,
+                            track.album.name,
+                            track.id
+                        );
+                        if (clicked) {
+                            //TODO: this is done every time, only need to do it 1x
+                            app.$refs.getSong.innerHTML = "Anotha one";
+                        }
                     }
                 }
-            });
+            );
         },
 
         setSong: function(track_id) {
-            let embed_prefix = 'https://open.spotify.com/embed?uri=spotify:track:';
+            let embed_prefix =
+                "https://open.spotify.com/embed?uri=spotify:track:";
             app.$refs.randomWebplayer.src = embed_prefix + track_id;
         },
 
@@ -79,17 +88,22 @@ let app = new Vue({
         },
 
         addToHistory: function(track, artist, album, id) {
-            app.globalHistory.unshift({ id: id, song: track, artist: artist, album: album });
+            app.globalHistory.unshift({
+                id: id,
+                song: track,
+                artist: artist,
+                album: album
+            });
         },
 
         copyToClipboard: function(e) {
-            let url_prefix = 'https://open.spotify.com/track/';
+            let url_prefix = "https://open.spotify.com/track/";
 
             if (app.globalHistory.length > 0) {
                 let text_node = app.$refs.historyCopyArea;
-                let s = '';
+                let s = "";
                 for (let i = app.globalHistory.length - 1; i >= 0; i--) {
-                    s += url_prefix + app.globalHistory[i].id + '\n';
+                    s += url_prefix + app.globalHistory[i].id + "\n";
                 }
 
                 text_node.value = s;
@@ -98,19 +112,18 @@ let app = new Vue({
         },
 
         doCopy: function(e, callback) {
-            let
-                t = e.target,
+            let t = e.target,
                 c = t.dataset.copytarget,
-                inp = (c ? document.querySelector(c) : null);
+                inp = c ? document.querySelector(c) : null;
 
             if (inp && inp.select) {
                 inp.select();
                 try {
-                    document.execCommand('copy');
+                    document.execCommand("copy");
                     inp.blur();
                     callback();
                 } catch (err) {
-                    alert('Please press Ctrl/Cmd+C to copy');
+                    alert("Please press Ctrl/Cmd+C to copy");
                 }
             }
         },
@@ -120,12 +133,13 @@ let app = new Vue({
 
             let el = app.$refs.historyCopyButton;
             //setting content in JS is probs a bad idea
-            let song_text = ' song';
+            let song_text = " song";
             if (app.globalHistory.length > 1) {
-                song_text += 's';
+                song_text += "s";
             }
-            el.innerHTML = app.globalHistory.length + song_text + ' added to clipboard!';
-            el.classList.add('animated', 'fadeIn');
+            el.innerHTML =
+                app.globalHistory.length + song_text + " added to clipboard!";
+            el.classList.add("animated", "fadeIn");
             if (!listener_added) {
                 listener_added = true;
                 el.addEventListener("animationend", app.animationEnded, false);
@@ -137,12 +151,12 @@ let app = new Vue({
         clearAlert: function() {
             let el = app.$refs.historyCopyButton;
             //setting content in JS is probs a bad idea
-            el.innerHTML = 'Copy history to clipboard';
-            el.classList.add('animated', 'fadeIn');
+            el.innerHTML = "Copy history to clipboard";
+            el.classList.add("animated", "fadeIn");
         },
 
         animationEnded: function(e) {
-            e.target.classList.remove('animated', 'fadeIn');
-        },
+            e.target.classList.remove("animated", "fadeIn");
+        }
     }
-})
+});
