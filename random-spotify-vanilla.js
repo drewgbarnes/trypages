@@ -30,7 +30,8 @@ let globalHistory = [];
 
 const getAccessToken = () => {
     const clientId = "3bdb037d4f41494aaf9104ae6df1fd85";
-    const redirectURI = encodeURIComponent("http://localhost:8888/");
+
+    const redirectURI = encodeURIComponent(`${window.location.origin}/`);
     window.location.replace(
         `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectURI}&response_type=token`
     );
@@ -88,8 +89,10 @@ const getRandomSong = (function() {
             searchCallback
         );
 
-        if (buttonClicked) {
-            //TODO: this is done every time, only need to do it 1x
+        if (
+            buttonClicked &&
+            document.getElementById("get-song").innerHTML !== "Anotha one!"
+        ) {
             document.getElementById("get-song").innerHTML = "Anotha one!";
         }
     };
