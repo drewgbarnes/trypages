@@ -12,7 +12,8 @@ body {
 
 .offscreen {
     position: absolute;
-    margin-left: -9999px;
+    visibility: hidden;
+    /*margin-left: -9999px;*/
 }
 
 .top-pad {

@@ -9,12 +9,13 @@ select/copy/delete selected?
 4>
 make functions general
 move general functions into shared files for use between different frameworks
+    not sure if this is possible
 random inline TODOs
 DRY
 remove globalHistory somehow
 closures
 5>
-angular version
+angular version?
 
 ^todo order:
 >1 syntactically functioning
