@@ -27,13 +27,24 @@ angular version
 "use strict";
 
 let globalHistory = [];
+let offline = true;
+
+// TODO: should I add an event listener instead? is that what this is?
+window.onoffline = () => {
+    offline = true;
+};
+
+window.ononline = () => {
+    offline = false;
+};
 
 const getAccessToken = () => {
-    const clientId = "3bdb037d4f41494aaf9104ae6df1fd85";
-
-    const redirectURI = encodeURIComponent(`${window.location.origin}/`);
+    const SPOTIFY_CLIENT_ID = "3bdb037d4f41494aaf9104ae6df1fd85";
+    const redirectURI = encodeURIComponent(
+        `${window.location.origin}${window.location.pathname}`
+    );
     window.location.replace(
-        `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectURI}&response_type=token`
+        `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_CLIENT_ID}&redirect_uri=${redirectURI}&response_type=token`
     );
 };
 
@@ -47,16 +58,17 @@ const getRandomSong = (function() {
         return Math.floor(Math.random() * lessThan);
     }
 
-    const access_token = window.location.hash
+    const accessToken = window.location.hash
         .split("&")[0]
         .split("#access_token=")[1];
 
-    if (!access_token) {
+    if (!accessToken && !offline) {
         getAccessToken();
     }
 
+    // TODO: show error and button to refresh if no access token
     const spotifyApi = new SpotifyWebApi();
-    spotifyApi.setAccessToken(access_token);
+    spotifyApi.setAccessToken(accessToken);
 
     function searchCallback(err, data) {
         if (err) {
@@ -99,10 +111,9 @@ const getRandomSong = (function() {
 })();
 
 const setSong = (function() {
-    const embed_prefix = "https://open.spotify.com/embed?uri=spotify:track:";
-    return function(track_id) {
-        document.getElementById("random-webplayer").src =
-            embed_prefix + track_id;
+    const embedPrefix = "https://open.spotify.com/embed?uri=spotify:track:";
+    return function(trackId) {
+        document.getElementById("random-webplayer").src = embedPrefix + trackId;
     };
 })();
 
@@ -159,20 +170,19 @@ function clearAlert() {
 }
 
 const alertCopied = (function() {
-    let listener_added = false;
+    let listenerAdded = false;
 
     return function() {
         let el = document.getElementById("history-copy-button");
         //setting content in JS is probs a bad idea
-        let song_text = " song";
+        let songText = " song";
         if (globalHistory.length > 1) {
-            song_text += "s";
+            songText += "s";
         }
-        el.innerHTML =
-            globalHistory.length + song_text + " added to clipboard!";
+        el.innerHTML = globalHistory.length + songText + " added to clipboard!";
         el.classList.add("animated", "fadeIn");
-        if (!listener_added) {
-            listener_added = true;
+        if (!listenerAdded) {
+            listenerAdded = true;
             el.addEventListener("animationend", animationEnded, false);
         }
 
@@ -181,17 +191,17 @@ const alertCopied = (function() {
 })();
 
 const copyToClipboard = (function() {
-    const url_prefix = "https://open.spotify.com/track/";
+    const urlPrefix = "https://open.spotify.com/track/";
 
     return function(e) {
         if (globalHistory.length > 0) {
-            let text_node = document.getElementById("history-copy-area");
+            let textNode = document.getElementById("history-copy-area");
             let s = "";
             for (let i = globalHistory.length - 1; i >= 0; i--) {
-                s += url_prefix + globalHistory[i] + "\n";
+                s += urlPrefix + globalHistory[i] + "\n";
             }
 
-            text_node.value = s;
+            textNode.value = s;
             doCopy(e, alertCopied);
         }
     };

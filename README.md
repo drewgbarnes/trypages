@@ -5,7 +5,6 @@ Currently home to:
 ## A random spotify song generator
 
 - has 3 versions written in React, Vue, or just plain ole JS
-- is broken right now, due to Spotify API changes
-- Should let you add selected random songs to an in-browser playlist which you can then export into Spotify
+- lets you add selected random songs to an in-browser playlist which you can then export into Spotify
 
 ## A few clips from LoL back when I still played it

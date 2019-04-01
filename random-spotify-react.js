@@ -22,7 +22,12 @@ dont use in browser babel
 class App extends React.Component {
     constructor(props) {
         super(props);
+        this.offline = false;
         this.spotifyApi = new SpotifyWebApi();
+        this.accessToken = window.location.hash
+            .split("&")[0]
+            .split("#access_token=")[1];
+        this.spotifyApi.setAccessToken(this.accessToken);
         this.state = { trackId: "", clicked: false, tracks: [] };
         this.getSong = this.getSong.bind(this);
         this.getAndSetTracks = this.getAndSetTracks.bind(this);
@@ -34,6 +39,16 @@ class App extends React.Component {
     componentDidMount() {
         this.getSong();
     }
+
+    getAccessToken = () => {
+        const SPOTIFY_CLIENT_ID = "3bdb037d4f41494aaf9104ae6df1fd85";
+        const redirectURI = encodeURIComponent(
+            `${window.location.origin}${window.location.pathname}`
+        );
+        window.location.replace(
+            `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_CLIENT_ID}&redirect_uri=${redirectURI}&response_type=token`
+        );
+    };
 
     getRandomLetter() {
         let alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -47,6 +62,10 @@ class App extends React.Component {
     getSong(event) {
         if (event && !this.state.clicked) {
             this.setClicked(true);
+        }
+
+        if (!this.accessToken && !this.offline) {
+            this.getAccessToken();
         }
 
         this.spotifyApi
@@ -129,7 +148,7 @@ class App extends React.Component {
                 <p className="text-center">
                     After songs are copied to your clipboard: go to the Spotify
                     desktop app, open a playlist, and paste (Ctrl/Cmd+V or Edit
-                    Menu -> paste)
+                    Menu -> Paste)
                 </p>
             </div>
         );
@@ -151,7 +170,10 @@ function GetButton(props) {
         : "Get a random song from Spotify!";
     return (
         <div className="col-md-6 col-md-offset-3 text-center">
-            <button className="btn btn-primary btn-lg" onClick={props.getSong}>
+            <button
+                className="btn btn-secondary btn-lg"
+                onClick={props.getSong}
+            >
                 {text}
             </button>
         </div>
