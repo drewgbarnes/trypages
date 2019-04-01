@@ -1,14 +1,46 @@
 /*
-TODO^:
+TODO:
 1>
 2>
 3>
-make this a general playlist building tool
-play music in background while searching
-select/copy/delete selected?
+make this a general playlist building tool?
+    JTBD:
+        I want to find new music.
+            I want to only find similar music to what I listen to.
+            I want to find music somewhat different from what I listen to, but not too different.
+            I want to find totally different music from what I am used to.
+            I want to find music based my friends' music choices/recs.
+
+read spotify's API EULA
+    actually integrate w/ spotify
+        add to the user's playlist
+        add to new playlist
+        add to queue
+        search based on user's prefs
+            https://github.com/JMPerez/spotify-web-api-js#personalization
+            as long as it isnt "dynamic"
+            https://developer.spotify.com/legal/commercial-restrictions/
+        etc
+        find random public playlists?
+            not sure if possible?
+        random within genre
+            other filters too: artist, song length, vibe (spotify has a keywork for this)
+
+    share button(s)
+    play music in background while searching
+    select/copy/delete selected?
+    preserve playlists between sessions/manage offline
 4>
-make functions general
-move general functions into shared files for use between different frameworks
+minify everything
+save relevant documentation for offline work
+    spotify api (their webpages?)
+    https://github.com/JMPerez/spotify-web-api-js
+    bootstrap
+    javascript/html/css/window functions...
+    react
+    vue
+make functions abstract
+move abstract functions into shared files for use between different frameworks
     not sure if this is possible
 random inline TODOs
 DRY
@@ -28,7 +60,7 @@ angular version?
 "use strict";
 
 let globalHistory = [];
-let offline = true;
+let offline = false;
 
 // TODO: should I add an event listener instead? is that what this is?
 window.onoffline = () => {
@@ -82,17 +114,18 @@ const getRandomSong = (function() {
                 return;
             }
             let track = data.tracks.items[0];
-            setSong(track.id);
             addToHistory(
                 track.name,
                 track.artists[0].name,
                 track.album.name,
                 track.id
             );
+            setSong(track.id);
         }
     }
 
     return function(buttonClicked = true) {
+        // TODO: pool of songs is only 26*10000.
         spotifyApi.searchTracks(
             getRandomLetter(),
             {
